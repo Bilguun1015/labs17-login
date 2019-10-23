@@ -3,6 +3,7 @@ const express = require('express');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const cors = require('cors');
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.use(session({secret: "Shh it is a secret", resave: true, saveUninitialized: 
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(express.json());
+app.use(cors())
 
 app.post(
    '/login',
