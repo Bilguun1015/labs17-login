@@ -3,7 +3,6 @@ const express = require('express');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const cors = require('cors');
 
 const app = express();
 
@@ -17,22 +16,16 @@ app.use(session({secret: "Shh it is a secret", resave: true, saveUninitialized: 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.json());
-app.use(cors())
 
-app.post(
-   '/login',
-   passport.authenticate('local', {
-       session: true
-   }),
-   (req, res) => {
-       if (req.isAuthenticated()) {
-           res.status(200).json({ message: 'You have successfully logged in' });
-       } else {
-           res.status(500).json({ message: 'Invalid credentials' });
-       }
-   }
-);
+app.get('/', function(req, res){
+    if(req.session.page_views){
+       req.session.page_views++;
+       res.send("You visited this page " + req.session.page_views + " times");
+    } else {
+       req.session.page_views = 1;
+       res.send("Welcome to this page for the first time!");
+    }
+ });
 
  const PORT = process.env.PORT || 3000;
 
